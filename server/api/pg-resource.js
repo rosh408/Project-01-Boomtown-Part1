@@ -17,6 +17,11 @@ function tagsQueryString(tags, itemid, result) {
         );
 }
 
+
+
+const result = tagsQueryString([5, 6, 7], 1, "");
+console.log(result);
+
 module.exports = postgres => {
   return {
     async createUser({ fullname, email, password }) {
@@ -193,6 +198,9 @@ module.exports = postgres => {
             client.query("BEGIN", async err => {
               const { title, description, tags } = item;
 
+              const tagVal = tags.map(tag => tag.id);
+              // console.log(tagVal);
+
               // Generate new Item query
               // @TODO
               // -------------------------------
@@ -211,9 +219,19 @@ module.exports = postgres => {
 
               const newItem = await client.query({
                 // 1st query: saving items in items table
-                text: `INSERT INTO items (title, description, ownerid) VALUES ($1, $2, 1) RETURNING *`,
+                text: `INSERT INTO items (title, description, ownerId) VALUES ($1, $2, 1) RETURNING *`,
                 values: [title, description]
               });
+             
+
+              const newItemsTags = await client.query({
+                text: `INSERT INTO items_tags (tagsid, itemsid) VALUES ${ tagsQueryString(tags, 3, '')}`,
+                values:  tagVal
+              });
+
+              // const itemVal = newItem.rows[0];
+
+              // console.log(itemVal);
 
               // const insertItems = await postgres.query({
               //   // 2nd query: inserting in to tag relations table, to define relationships in the tags
