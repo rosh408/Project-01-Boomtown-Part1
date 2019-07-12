@@ -94,23 +94,6 @@ module.exports = postgres => {
       } catch (e) {
         throw "User cant be found";
       }
-
-      // if (user) {
-      //   const id = user.rows[0];
-      //   const email = user.rows[0];
-      //   const fullname = user.rows[0];
-      //   const bio = user.rows[0];
-      //   return {
-      //     id,
-      //     email,
-      //     fullname,
-      //     bio
-      //   };
-      // } else {
-      //   throw "User is not found";
-      // }
-
-      // -------------------------------
     },
     async getItems(idToOmit) {
       const items = await postgres.query({
@@ -126,10 +109,10 @@ module.exports = postgres => {
          *  to your query text using string interpolation
          */
 
-         // Get all items where idToOmit = ownerId, if that idToOmit has a value return items
-         // only where the ownderId does not equal to idToOmit
-
-        text: `SELECT * FROM items WHERE idToOmit = $1`,
+        // Get all items where idToOmit = ownerId, if that idToOmit has a value return items
+        // only where the ownerId does not equal to idToOmit
+        // this refers to the front page where you want to only see other people's items
+        text: `SELECT * FROM items WHERE ownerId = $1`,
         values: idToOmit ? [idToOmit] : []
       });
       return items.rows;
@@ -141,7 +124,8 @@ module.exports = postgres => {
          *  Get all Items for user using their id
          */
 
-        text: `SELECT * FROM items WHERE (borrowerid = 2) AND (ownerid IS NOT NULL); `,
+        // this refers to your profile page where you wanna see all your items only
+        text: `SELECT * FROM items WHERE ownerId = $1;`,
         values: [id]
       });
       return items.rows;
@@ -152,25 +136,32 @@ module.exports = postgres => {
          *  @TODO:
          *  Get all Items borrowed by user using their id
          */
-        text: ``,
+        text: `SELECT * FROM items WHERE (borrowerid = $1);`,
         values: [id]
       });
       return items.rows;
     },
     async getTags() {
-      const tags = await postgres.query(/* @TODO: Basic queries */);
+      const tags = await postgres.query({
+        /* @TODO: Basic queries */
+        text: `SELECT * FROM tags`,
+        values: [id]
+      });
       return tags.rows;
     },
     async getTagsForItem(id) {
       const tagsQuery = {
-        text: ``, // @TODO: Advanced query Hint: use INNER JOIN
+        // @TODO: Advanced query Hint: use INNER JOIN
+
+        // get all tags id for a particular item id
+        text: `SELECT * FROM a.items, b.tags INNER JOIN a ON b;`,
         values: [id]
       };
 
       const tags = await postgres.query(tagsQuery);
       return tags.rows;
     },
-    async saveNewItem({ item, user }) {
+    async saveNewItem({ item, image, user }) {
       /**
        *  @TODO: Adding a New Item
        *
@@ -183,7 +174,7 @@ module.exports = postgres => {
        *  3) If any of the INSERT queries fail, any successful INSERT
        *     queries should be 'rolled back' to avoid 'orphan' data in the database.
        *
-       *  To achieve #3 we'll ue something called a Postgres Transaction!
+       *  To achieve #3 we'll use something called a Postgres Transaction!
        *  The code for the transaction has been provided for you, along with
        *  helpful comments to help you get started.
        *
@@ -218,6 +209,22 @@ module.exports = postgres => {
               // @TODO
               // -------------------------------
 
+              const newItem = await client.query({
+                // 1st query: saving items in items table
+                text: `INSERT INTO items (title, description, ownerid) VALUES ($1, $2, 1) RETURNING *`,
+                values: [title, description]
+              });
+
+              // const insertItems = await postgres.query({
+              //   // 2nd query: inserting in to tag relations table, to define relationships in the tags
+              //   text: `INSERT INTO items_tags (itemsid, tagsid) VALUES ($1, $2)`,
+              //   values: []
+              // });
+
+              //console.log(saveItems);
+              // console.log(insertItems);
+              // await client.query(insertItems);
+
               // Commit the entire transaction!
               client.query("COMMIT", err => {
                 if (err) {
@@ -226,7 +233,7 @@ module.exports = postgres => {
                 // release the client back to the pool
                 done();
                 // Uncomment this resolve statement when you're ready!
-                // resolve(newItem.rows[0])
+                resolve(newItem.rows[0]);
                 // -------------------------------
               });
             });
