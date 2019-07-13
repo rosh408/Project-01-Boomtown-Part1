@@ -197,6 +197,7 @@ module.exports = postgres => {
             // Begin postgres transaction
             client.query("BEGIN", async err => {
               const { title, description, tags } = item;
+              console.log(tags);
 
               const tagVal = tags.map(tag => tag.id);
               // console.log(tagVal);
@@ -223,11 +224,18 @@ module.exports = postgres => {
                 values: [title, description]
               });
              
+              const newItemId = newItem.rows[0];
+              const idInsert = newItemId.id;
+              console.log(idInsert);
 
               const newItemsTags = await client.query({
-                text: `INSERT INTO items_tags (tagsid, itemsid) VALUES ${ tagsQueryString(tags, 3, '')}`,
+                text: `INSERT INTO items_tags (tagsid, itemsid) VALUES ${ tagsQueryString(tags, newItem.rows[0].id, '')}`,
                 values:  tagVal
               });
+
+             
+              
+
 
               // const itemVal = newItem.rows[0];
 
