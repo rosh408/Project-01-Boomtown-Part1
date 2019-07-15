@@ -115,7 +115,6 @@ module.exports = app => {
       // @TODO: Uncomment this later when we add auth
       // ...authMutations(app),
       // -------------------------------
-
       async addItem(parent, args, context, info) {
         try {
           const user = "Rosh";
