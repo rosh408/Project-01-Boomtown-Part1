@@ -1,4 +1,3 @@
-
 const { ApolloError } = require("apollo-server-express");
 const { DateScalar } = require("../custom-types");
 
@@ -18,61 +17,97 @@ module.exports = app => {
           throw new ApolloError(e);
         }
       },
-      async items() {
-        return [];
+      async items(parent, { id }, { pgResource }, info) {
+        try {
+          const items = await pgResource.getItems({
+            id,
+            title,
+            description
+          });
+          return items;
+        } catch (e) {
+          throw "Item can't be found";
+        }
       },
-      async tags() {
-        return [];
+      async tags(parent, { id }, { pgResource }, info) {
+        try {
+          const tags = await pgResource.getTags({
+            id,
+            title
+          });
+          return tags;
+        } catch (e) {
+          throw "Tags can't be found";
+        }
       }
     },
 
     User: {
-      // @TODO: Uncomment these lines after you define the User type with these fields
-      // items() {
-      //   // @TODO: Replace this mock return statement with the correct items from Postgres
-      //   return []
-      //   // -------------------------------
-      // },
-      // borrowed() {
-      //   // @TODO: Replace this mock return statement with the correct items from Postgres
-      //   return []
-      //   // -------------------------------
-      // }
-      // -------------------------------
+      async items(parent, { id }, { pgResource }, info) {
+        try {
+          const getItems = await pgResource.getItemsForUser({
+            id,
+            title,
+            description
+          });
+          return getItems;
+        } catch (e) {}
+        throw "Item can't be found";
+      },
+      async borrowed({ id }, args, { pgResource }, info) {
+        try {
+          const getBorrowedItems = await pgResource.getBorrowedItemsForUser({
+            id,
+            title,
+            description
+          });
+          return getBorrowedItems;
+        } catch (e) {
+          throw "Borrowed Item can't be found";
+        }
+      }
     },
 
     Item: {
-      /**
-       *  @TODO: Advanced resolvers
-       *
-       *  The Item GraphQL type has two fields that are not present in the
-       *  Items table in Postgres: itemowner, tags and borrower.
-       *
-       * According to our GraphQL schema, the itemowner and borrower should return
-       * a User (GraphQL type) and tags should return a list of Tags (GraphQL type)
-       *
-       */
-      // @TODO: Uncomment these lines after you define the Item type with these fields
-      async itemowner() {
-        return {
-          id: 1,
-          fullname: "Rosh Canlas",
-          email: "rosh_408@hotmail.com",
-          bio: "Full Stack Web Developer"
+      async itemowner(parent, { id }, { pgResource }, info) {
+        try {
+          const itemowner = await pgResource.getItemsForUser({
+            id,
+            fullname,
+            email,
+            bio
+          });
+          return itemowner;
+        } catch (e) {
+          throw "Item owner can't be found";
         }
       },
       async tags() {
-      //   // @TODO: Replace this mock return statement with the correct tags for the queried Item from Postgres
-      //   return []
-      //   // -------------------------------
+        try {
+          const getTags = await pgResource.getTagsForItem({
+            id,
+            title
+          });
+          return getTags;
+        } catch (e) {
+          throw "Tags can't be found";
+        }
       },
       async borrower() {
-      //   /**
-      //    * @TODO: Replace this mock return statement with the correct user from Postgres
-      //    * or null in the case where the item has not been borrowed.
-      //    */
-      //   return null
-      //   // -------------------------------
+        try {
+          const borrowedUser = await pgResource.getBorrowedItemsForUser({
+            id,
+            title,
+            description
+          });
+          if (!borrowedUser) {
+            return null;
+          } else {
+            return borrowedUser;
+          }
+        } catch (e) {
+          throw "Borrowed Item can't be found";
+        }
       }
     },
 
@@ -82,19 +117,6 @@ module.exports = app => {
       // -------------------------------
 
       async addItem(parent, args, context, info) {
-        /**
-         *  @TODO: Destructuring
-         *
-         *  The 'args' and 'context' parameters of this resolver can be destructured
-         *  to make things more readable and avoid duplication.
-         *
-         *  When you're finished with this resolver, destructure all necessary
-         *  parameters in all of your resolver functions.
-         *
-         *  Again, you may look at the user resolver for an example of what
-         *  destructuring should look like.
-         */
-
         try {
           const user = "Rosh";
           const newItem = await context.pgResource.saveNewItem({
