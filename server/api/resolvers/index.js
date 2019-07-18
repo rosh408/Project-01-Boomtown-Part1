@@ -31,12 +31,10 @@ module.exports = app => {
       },
       async tags(parent, { id }, { pgResource }, info) {
         try {
-          const tags = await pgResource.getTags({
-            id,
-            title
-          });
+          const tags = await pgResource.getTags();
           return tags;
         } catch (e) {
+          console.log(e);
           throw "Tags can't be found";
         }
       }

@@ -61,14 +61,14 @@ module.exports = postgres => {
       }
     },
     async getItems(idToOmit) {
-      const items = await postgres.query({
-        // This Query lets the user only see items from other people on the front page
-        text: `SELECT * FROM items WHERE ownerId = $1`,
-        values: idToOmit ? [idToOmit] : []
-      });
       try {
-        const returnItems = await postgres.query(items);
-        return returnItems.rows[0];
+        // const returnItems = await postgres.query(items);
+        const items = await postgres.query({
+          // This Query lets the user only see items from other people on the front page
+          text: `SELECT * FROM items WHERE ownerId = $1`,
+          values: idToOmit ? [idToOmit] : []
+        });
+        return items.rows;
       } catch (e) {
         throw "Item can't be found";
       }
@@ -102,12 +102,10 @@ module.exports = postgres => {
 
     async getTags() {
       const tags = await postgres.query({
-        text: `SELECT * FROM tags`,
-        values: [id]
+        text: `SELECT * FROM tags`
       });
       try {
-        const returnTags = await postgres.query(tags);
-        return returnTags.rows[0];
+        return tags.rows;
       } catch (e) {
         throw "Tags can't be found";
       }
