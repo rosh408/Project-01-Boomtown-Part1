@@ -52,6 +52,7 @@ module.exports = gql`
   }
 
   type Query {
+    uploads: [File]
     user(id: ID!): User
     viewer: User
     items(filter: ID): [Item]
@@ -62,3 +63,19 @@ module.exports = gql`
     addItem(item: NewItemInput!): Item
   }
 `;
+
+// type Query {
+//   uploads: [File]
+//   user(id: ID!): User
+//   viewer: User
+//   items(filter: ID): Item
+//   tags: [Tag]
+// }
+
+// type Query {
+//   uploads: [File]
+//   user(id: ID!): User
+//   viewer: User
+//   items(filter: ID): [Item]
+//   tags: [Tag]
+// }

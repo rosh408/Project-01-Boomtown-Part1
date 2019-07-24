@@ -52,7 +52,6 @@ module.exports = postgres => {
         // 1st value of the array will represent $1 and 2nd value will represent $2. etc
         values: [id]
       };
-
       try {
         const user = await postgres.query(findUserQuery);
         return user.rows[0];
@@ -60,29 +59,46 @@ module.exports = postgres => {
         throw "User cant be found";
       }
     },
+
+    // original, uncomment when solution has been found
+    // async getItems(idToOmit) {
+    //   try {
+    //     // const returnItems = await postgres.query(items);
+    //     const items = await postgres.query({
+    //       // This Query lets the user only see items from other people on the front page
+    //       text: `SELECT * FROM items WHERE ownerid = $1`,
+    //       values: idToOmit ? [idToOmit] : []
+    //     });
+    //     return items.rows[0];
+    //   } catch (e) {
+    //     throw "Can't find items";
+    //   }
+    // },
     async getItems(idToOmit) {
       try {
         // const returnItems = await postgres.query(items);
         const items = await postgres.query({
           // This Query lets the user only see items from other people on the front page
-          text: `SELECT * FROM items WHERE ownerId = $1`,
+          text: `SELECT * FROM items WHERE ownerid != $1`,
           values: idToOmit ? [idToOmit] : []
         });
+        // This only seems to work when returning a single item rather than all of them
         return items.rows;
       } catch (e) {
-        throw "Item can't be found";
+        console.log(e);
+        throw "Can't find items";
       }
     },
     async getItemsForUser(id) {
       const items = await postgres.query({
         // This Query refers to the user's profile page where
         // the user can only see their own items
-        text: `SELECT * FROM items WHERE ownerId = $1;`,
+        text: `SELECT * FROM items WHERE ownerid = $1;`,
         values: [id]
       });
       try {
         const getItems = await postgres.query(items);
-        return getItems.rows[0];
+        return getItems.rows;
       } catch (e) {
         throw "Item can't be found";
       }
@@ -94,7 +110,7 @@ module.exports = postgres => {
       });
       try {
         const getItems = await postgres.query(items);
-        return getItems.rows[0];
+        return getItems.rows;
       } catch (e) {
         throw "Item can't be found";
       }
@@ -113,12 +129,13 @@ module.exports = postgres => {
 
     async getTagsForItem(id) {
       const tagsQuery = {
-        text: `SELECT * FROM a.items, b.tags INNER JOIN a ON b;`,
+        text: `SELECT * FROM tags INNER JOIN items_tags ON items_tags.tagsid = tags.id 
+        WHERE items_tags.itemsid=$1;`,
         values: [id]
       };
       try {
         const tags = await postgres.query(tagsQuery);
-        return tags.rows[0];
+        return tags.rows;
       } catch (e) {
         throw "Tags can't be found";
       }

@@ -3,8 +3,8 @@ import ReactDOM from "react-dom";
 import { MuiThemeProvider } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { ApolloProvider } from "react-apollo";
-import { BrowserRouter } from 'react-router-dom';
-// import { Provider as ReduxProvider } from 'react-redux'
+import { BrowserRouter } from "react-router-dom";
+import { Provider as ReduxProvider } from 'react-redux'
 // -------------------------------
 
 import registerServiceWorker from "./registerServiceWorker";
@@ -27,8 +27,8 @@ import client from "./apollo";
  *
  * Uncomment the following line when your routes are configured
  */
-  import AppRoutes from './routes';
- /*
+import AppRoutes from "./routes";
+/*
  * Below in your <App />, nest your <AppRoutes /> inside of <BrowserRouter />
  * component to enable routing in your client app.
  */
@@ -37,9 +37,9 @@ import client from "./apollo";
  * @TODO: Initialize Redux Store
  *
  * Uncomment the following line when your Redux store is configured
- *
- * import store from './redux'
- *
+ */
+import store from "./redux";
+/*
  * Below in your <App />, wrap a <ReduxProvider /> component around all
  * of the app's children, and pass it the imported `store` as the `store`
  * prop's value.
@@ -55,22 +55,20 @@ import client from "./apollo";
  * user is currently logged in and who that user is.
  */
 
-// @TODO: Remove this import once you have your router working below
-import Home from "./pages/Home";
-import Items from "./pages/Items";
-
 import "./index.css";
 
 const App = () => {
   return (
-    <MuiThemeProvider theme={theme}>
-      <CssBaseline />
-      <ApolloProvider client={client}>
-        <BrowserRouter>
-          <AppRoutes />
-        </BrowserRouter>
-      </ApolloProvider>
-    </MuiThemeProvider>
+    <ReduxProvider store={store}>
+      <MuiThemeProvider theme={theme}>
+        <CssBaseline />
+        <ApolloProvider client={client}>
+          <BrowserRouter>
+            <AppRoutes />
+          </BrowserRouter>
+        </ApolloProvider>
+      </MuiThemeProvider>
+    </ReduxProvider>
   );
 };
 

@@ -1,9 +1,9 @@
 import React, { Fragment } from "react";
 import { Redirect, Route, Switch } from "react-router";
-import ItemsContainer from "../pages/Items";
-import HomeContainer from "../pages/Home";
-import ShareContainer from "../pages/Share";
-import ProfileContainer from "../pages/Profile";
+import Items from "../pages/Items";
+import Home from "../pages/Home";
+import Share from "../pages/Share";
+import Profile from "../pages/Profile";
 
 import { BrowserRouter as Router, Link } from "react-router-dom";
 
@@ -19,12 +19,12 @@ export default () => (
        * Later, we'll add logic to send users to one set of routes if they're logged in,
        * or only view the /welcome page if they are not.
        */}
-      <Route path="/items" exact component={ItemsContainer} />
-      <Route path="/welcome" exact component={HomeContainer} />
-      <Route path="/share" exact component={ShareContainer} />
-      <Route path="/profile" exact component={ProfileContainer} />
-      <Route path="/profile/:userid" component={ProfileContainer} />
-      <Redirect from="/allitems" to="/items" />
+      <Route path="/items" exact component={Items} />
+      <Route path="/welcome" exact component={Home} />
+      <Route path="/share" exact component={Share} />
+      <Route path="/profile" exact component={Profile} />
+      <Route path="/profile/:userid" component={Profile} />
+      <Redirect from="/" to="/items" />
     </Switch>
   </Fragment>
 );
