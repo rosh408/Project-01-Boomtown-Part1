@@ -4,54 +4,41 @@ import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
+import Gravatar from "react-gravatar";
+import CardMedia from "@material-ui/core/CardMedia";
 
 const useStyles = makeStyles({
   card: {
-    minWidth: 275,
+    minWidth: 275
   },
   bullet: {
-    display: 'inline-block',
-    margin: '0 2px',
-    transform: 'scale(0.8)',
+    display: "inline-block",
+    margin: "0 2px",
+    transform: "scale(0.8)"
   },
   title: {
-    fontSize: 14,
+    fontSize: 14
   },
   pos: {
-    marginBottom: 12,
-  },
+    marginBottom: 12
+  }
 });
 
 export default function SimpleCard() {
-
   const classes = useStyles();
   const bull = <span className={classes.bullet}>•</span>;
 
   return (
     <Card>
-      <CardContent>
-        <Typography  color="textSecondary" gutterBottom>
-          Word of the Day
-        </Typography>
-        <Typography variant="h5" component="h2">
-          be
-          {bull}
-          nev
-          {bull}o{bull}
-          lent
-        </Typography>
-        <Typography color="textSecondary">
-          adjective
-        </Typography>
-        <Typography variant="body2" component="p">
-          well meaning and kindly.
-          <br />
-          {'"a benevolent smile"'}
-        </Typography>
+      <CardContent style={{ height: 450 }}>
+        <Gravatar
+          style={{ borderRadius: 50 }}
+          email="rosh_408@hotmail.com"
+          size={60}
+        />
       </CardContent>
       <CardActions>
-        <Button size="small">Learn More</Button>
+        <Button size="small" style={{border: 1, borderColor: '#000'}}>Borrow</Button>
       </CardActions>
     </Card>
   );

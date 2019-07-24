@@ -3,7 +3,8 @@ import { withStyles } from "@material-ui/core/styles";
 import styles from "./styles";
 import ShareItemPreview from "../../components/ShareItemPreview";
 import ShareItemForm from "../../components/ShareItemForm";
-import Grid from "@material-ui/core/Grid"
+import Grid from "@material-ui/core/Grid";
+import CardHeader from "@material-ui/core/CardHeader";
 
 /* 
   TODO: Create ShareItemFrom and ShareItemPreview in the components dir
@@ -20,12 +21,15 @@ import { SwipeableDrawer } from "@material-ui/core";
 
 const Share = ({ tags, classes }) => {
   return (
-    <div className="">
-    <Grid item lg={100}>
-    <ShareItemForm tags={tags} classes={classes} />
-    </Grid>
-    <Grid item lg={100}>    
-        <ShareItemPreview />
+    <div className="share-container">
+    <CardHeader/>
+      <Grid container spacing={0} justify="space-around">
+        <Grid item xs={4}>
+          <ShareItemPreview />
+        </Grid>
+        <Grid item xs={4}>
+          <ShareItemForm tags={tags} classes={classes} />
+        </Grid>
       </Grid>
     </div>
   );
