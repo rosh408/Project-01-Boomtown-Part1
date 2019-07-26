@@ -1,16 +1,15 @@
 import React from "react";
 import { withStyles } from "@material-ui/core/styles";
-import styles from "./styles";
-// import Gravatar from "react-gravatar";
+import { makeStyles } from "@material-ui/core/styles";
+import grey from "@material-ui/core/colors/grey"
 import ItemGrid from "../../components/ItemGrid";
 
 const Items = ({ classes, items }) => {
   return (
-    <div>
-      {/* <Gravatar email="rosh_408@hotmail.com"/> */}
+    <div className={classes.root}>
       <ItemGrid items={items} />
     </div>
   );
 };
 
-export default withStyles(styles)(Items);
+export default Items;

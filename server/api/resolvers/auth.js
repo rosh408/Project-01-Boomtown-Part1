@@ -1,26 +1,14 @@
-const { AuthenticationError } = require('apollo-server-express');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+const { AuthenticationError } = require("apollo-server-express");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+console.log(jwt);
 
 function setCookie({ tokenName, token, res }) {
-  /**
-   *  @TODO: Authentication - Server
-   *
-   *  This helper function is responsible for attaching a cookie to the HTTP
-   *  response. 'apollo-server-express' handles returning the response to the client.
-   *  We added the 'req' object to the resolver context so we can use it to atttach the cookie.
-   *  The 'req' object comes from express.
-   *
-   *  A secure cookie that can be used to store a user's session data has the following properties:
-   *  1) It can't be accessed from JavaScript
-   *  2) It will only be sent via https (but we'll have to disable this in development using NODE_ENV)
-   *  3) A boomtown cookie should oly be valid for 2 hours.
-   */
-  // Refactor this method with the correct configuration values.
   res.cookie(tokenName, token, {
-    // @TODO: Supply the correct configuration values for our cookie here
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    maxAge: 1000 * 60 * 60 * 2 // 2h
   });
-  // -------------------------------
 }
 
 function generateToken(user, secret) {
@@ -35,14 +23,26 @@ function generateToken(user, secret) {
    *  which can be decoded using the app secret to retrieve the stateless session.
    */
   // Refactor this return statement to return the cryptographic hash (the Token)
-  return '';
-  // -------------------------------
+
+  return jwt.JsonWebTokenError;
 }
 
-module.exports = (app) => {
+module.exports = app => {
   return {
-    async signup(parent, args, context) {
+    async signup(
+      parent,
+      {
+        user: { fullname, email, password }
+      },
+      { pgResource, req }
+    ) {
       try {
+        password = await bcrypt.hash(password, 10);
+        const user = await pgResource.createUser({
+          fullname: fullname,
+          email: email,
+          password: password
+        });
         /**
          * @TODO: Authentication - Server
          *
@@ -54,19 +54,13 @@ module.exports = (app) => {
          * and store that instead. The password can be decoded using the original password.
          */
         // @TODO: Use bcrypt to generate a cryptographic hash to conceal the user's password before storing it.
-        const hashedPassword = '';
+        const hashedPassword = "";
         // -------------------------------
 
-        const user = await context.pgResource.createUser({
-          fullname: args.user.fullname,
-          email: args.user.email,
-          password: hashedPassword
-        });
-
         setCookie({
-          tokenName: app.get('JWT_COOKIE_NAME'),
-          token: generateToken(user, app.get('JWT_SECRET')),
-          res: context.req.res
+          tokenName: app.get("JWT_COOKIE_NAME"),
+          token: generateToken(user, app.get("JWT_SECRET")),
+          res: req.res
         });
 
         return {
@@ -92,11 +86,11 @@ module.exports = (app) => {
         // Use bcrypt to compare the provided password to 'hashed' password stored in your database.
         const valid = false;
         // -------------------------------
-        if (!valid || !user) throw 'User was not found.';
+        if (!valid || !user) throw "User was not found.";
 
         setCookie({
-          tokenName: app.get('JWT_COOKIE_NAME'),
-          token: generateToken(user, app.get('JWT_SECRET')),
+          tokenName: app.get("JWT_COOKIE_NAME"),
+          token: generateToken(user, app.get("JWT_SECRET")),
           res: context.req.res
         });
 
@@ -109,7 +103,7 @@ module.exports = (app) => {
     },
 
     logout(parent, args, context) {
-      context.req.res.clearCookie(app.get('JWT_COOKIE_NAME'));
+      context.req.res.clearCookie(app.get("JWT_COOKIE_NAME"));
       return true;
     }
   };

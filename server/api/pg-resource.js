@@ -15,7 +15,8 @@ module.exports = postgres => {
   return {
     async createUser({ fullname, email, password }) {
       const newUserInsert = {
-        text: "",
+        text:
+          "INSERT INTO users (fullname, email, password) VALUES ($1, $2, $3) RETURNING *",
         values: [fullname, email, password]
       };
       try {
@@ -28,7 +29,7 @@ module.exports = postgres => {
           case /users_email_key/.test(e.message):
             throw "An account with this email already exists.";
           default:
-            throw "There was a problem creating your account.";
+            throw e;
         }
       }
     },
@@ -90,16 +91,18 @@ module.exports = postgres => {
       }
     },
     async getItemsForUser(id) {
-      const items = await postgres.query({
+      const items = {
         // This Query refers to the user's profile page where
         // the user can only see their own items
         text: `SELECT * FROM items WHERE ownerid = $1;`,
         values: [id]
-      });
+      };
       try {
         const getItems = await postgres.query(items);
+        console.log(getItems.rows);
         return getItems.rows;
       } catch (e) {
+        console.log(e);
         throw "Item can't be found";
       }
     },

@@ -1,15 +1,9 @@
-import React from 'react';
+import React, { unstable_Profiler } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import styles from './styles';
 
 const Profile = ({ classes }) => {
-  return (
-    <div>
-      <p>
-        This is the profile page located at <code>/profile/:userId</code>.
-      </p>
-    </div>
-  );
+  return ;
 };
 
 export default withStyles(styles)(Profile);

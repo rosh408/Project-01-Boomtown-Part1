@@ -1,33 +1,4 @@
-// import React, { Component } from "react";
-// import ItemCard from "../components/ItemCard";
-// import { updateItem, resetItem, resetImageItem } from "../../redux/ShareItemPreviewReducer/reducer";
-// import { connect } from "react-redux";
-// import { withStyles } from "@material-ui/core";
 
-// const ShareItemForm = () => {
-//   return (
-//     <div>
-//       <ItemCard />
-//     </div>
-//   );
-// };
-// // converts disptach
-// const mapDispatchToProps = dispatch => ({
-//   // we create our own function to call an action
-//   updateItem(item) {
-//     dispatch(updateItem(item));
-//   },
-//   resetItem(){
-//     dispatch(resetItem());
-//   },
-//   resetItemImage(){
-//     dispatch(resetItemImage());
-//   }
-// });
-
-// export default connect(null, mapDispatchToProps)(withStyles(styles))(ShareItemForm);
-
-//
 import React, { Component } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
@@ -137,7 +108,6 @@ class ShareItemForm extends Component {
   render() {
     const { tags, classes, updateItem } = this.props;
     return (
-      <div>
         <Card>
           <CardContent>
             <Form
@@ -216,6 +186,7 @@ class ShareItemForm extends Component {
                       )}
                     />
                   </div>
+
                   <div>
                     <Field
                       name="describe"
@@ -282,7 +253,6 @@ class ShareItemForm extends Component {
             />
           </CardContent>
         </Card>
-      </div>
     );
   }
 }

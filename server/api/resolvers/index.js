@@ -1,5 +1,6 @@
 const { ApolloError } = require("apollo-server-express");
 const { DateScalar } = require("../custom-types");
+const authMutations = require("./auth");
 
 module.exports = app => {
   return {
@@ -96,9 +97,7 @@ module.exports = app => {
     },
 
     Mutation: {
-      // @TODO: Uncomment this later when we add auth
-      // ...authMutations(app),
-      // -------------------------------
+      ...authMutations(app),
       async addItem(parent, { item }, { pgResource }, info) {
         try {
           const user = "Rosh";

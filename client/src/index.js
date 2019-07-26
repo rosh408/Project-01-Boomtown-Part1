@@ -4,7 +4,8 @@ import { MuiThemeProvider } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { ApolloProvider } from "react-apollo";
 import { BrowserRouter } from "react-router-dom";
-import { Provider as ReduxProvider } from 'react-redux'
+import { Provider as ReduxProvider } from "react-redux";
+import { ViewerProvider } from "./context/ViewerProvider";
 // -------------------------------
 
 import registerServiceWorker from "./registerServiceWorker";
@@ -63,9 +64,11 @@ const App = () => {
       <MuiThemeProvider theme={theme}>
         <CssBaseline />
         <ApolloProvider client={client}>
-          <BrowserRouter>
-            <AppRoutes />
-          </BrowserRouter>
+          <ViewerProvider>
+            <BrowserRouter>
+              <AppRoutes />
+            </BrowserRouter>
+          </ViewerProvider>
         </ApolloProvider>
       </MuiThemeProvider>
     </ReduxProvider>

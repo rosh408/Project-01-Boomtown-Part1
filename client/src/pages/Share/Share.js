@@ -24,9 +24,8 @@ const Share = ({ tags, classes }) => {
     <div className="share-container">
     <CardHeader/>
       <Grid container spacing={0} justify="space-around">
-        <Grid item xs={4}>
           <ShareItemPreview />
-        </Grid>
+          {/* Remove grid item and add them to shareitemform js */}
         <Grid item xs={4}>
           <ShareItemForm tags={tags} classes={classes} />
         </Grid>
