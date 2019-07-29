@@ -12,8 +12,6 @@ class ShareContainer extends Component {
         {({ loading, error, classes }) => {
           if (loading) return <FullScreenLoader inverted />;
           if (error) return <p>{`Error! ${error.message}`}</p>;
-          // return something
-          // return <Items classes={this.props.classes} items={data.items} />;
           return <Share />
         }}
       </Query>

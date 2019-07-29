@@ -48,9 +48,8 @@ import store from "./redux";
 
 /**
  * @TODO: Add the Viewer Context
- *
- * import { ViewerProvider } from './context/ViewerProvider'
- *
+ */
+ /*
  * Below in your <App />, wrap the <ViewerProvider /> component around
  * the <BrowserRouter /> component so the router is aware of whether a
  * user is currently logged in and who that user is.
@@ -59,20 +58,20 @@ import store from "./redux";
 import "./index.css";
 
 const App = () => {
-  return (
-    <ReduxProvider store={store}>
-      <MuiThemeProvider theme={theme}>
-        <CssBaseline />
-        <ApolloProvider client={client}>
-          <ViewerProvider>
-            <BrowserRouter>
-              <AppRoutes />
-            </BrowserRouter>
-          </ViewerProvider>
-        </ApolloProvider>
-      </MuiThemeProvider>
-    </ReduxProvider>
-  );
+    return (
+      <ReduxProvider store={store}>
+        <MuiThemeProvider theme={theme}>
+          <CssBaseline />
+          <ApolloProvider client={client}>
+            <ViewerProvider>
+              <BrowserRouter>
+                <AppRoutes />
+              </BrowserRouter>
+            </ViewerProvider>
+          </ApolloProvider>
+        </MuiThemeProvider>
+      </ReduxProvider>
+    );
 };
 
 ReactDOM.render(<App />, document.getElementById("root"));

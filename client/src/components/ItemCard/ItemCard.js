@@ -31,6 +31,8 @@ const useStyles = makeStyles({
 export class ItemCard extends Component {
   render() {
     const { item } = this.props;
+    const tagTitle = [];
+    console.log(item.created)
     return (
       <ViewerContext.Consumer>
         {({ viewer }) => {
@@ -38,7 +40,7 @@ export class ItemCard extends Component {
             <Card>
               <Grid container>
                 <Typography>
-                  <img src={item.imageurl} />
+                  {/* <img src={item.imageurl} /> */}
                   <Grid item xs={4}>
                     <CardContent style={{ height: 450, width: 430 }}>
                       <Gravatar
@@ -46,11 +48,10 @@ export class ItemCard extends Component {
                         email=""
                         size={40}
                       />
-                      <p>{item.tags.map(tag => tag.title)}</p>
-                      <p>{item.borrower.fullname}</p>
-                      <p>{item.created}</p>
-                      <p>{item.title}</p>
-                      <p>{item.description}</p>
+                      {/* <p>{item.borrower.fullname}</p> */}
+                      {/* <p>{item.created}</p> */}
+                      {/* <p>{item.title}</p> */}
+                      {/* <p>{item.description}</p> */}
                     </CardContent>
                     <CardActions>
                       <Button
