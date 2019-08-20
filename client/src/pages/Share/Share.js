@@ -5,7 +5,7 @@ import ShareItemPreview from "../../components/ShareItemPreview";
 import ShareItemForm from "../../components/ShareItemForm";
 import Grid from "@material-ui/core/Grid";
 import CardHeader from "@material-ui/core/CardHeader";
-
+import PropTypes from "prop-types";
 /* 
   TODO: Create ShareItemFrom and ShareItemPreview in the components dir
   and call them from this file.
@@ -33,5 +33,10 @@ const Share = ({ tags, classes }) => {
     </div>
   );
 };
+
+Share.propTypes = {
+  tags: PropTypes.array.isRequired,
+  classes: PropTypes.object.isRequired
+}
 
 export default withStyles(styles)(Share);

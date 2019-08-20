@@ -1,11 +1,9 @@
 import React, { Fragment } from "react";
 import { Redirect, Route, Switch } from "react-router";
-
 import ProfileContainer from "../pages/Profile";
 import ItemsContainer from "../pages/Items";
 import HomeContainer from "../pages/Home";
 import ShareContainer from "../pages/Share";
-import MenuBar from "../components/MenuBar";
 import PRoute from "../components/PrivateRoute";
 import { ViewerContext } from "../context/ViewerProvider";
 import FullScreenLoader from "../components/FullScreenLoader";
@@ -14,7 +12,6 @@ export default () => (
   <ViewerContext.Consumer>
     {({ viewer, loading }) => {
       if (loading) return <FullScreenLoader />;
-
       if (!viewer) {
         return (
           <Switch>
@@ -25,8 +22,6 @@ export default () => (
       }
       return (
         <Fragment>
-          <MenuBar>
-            </MenuBar>
           <Switch>
             <PRoute path="/welcome" component={HomeContainer} />
             <PRoute path="/items" component={ItemsContainer} />

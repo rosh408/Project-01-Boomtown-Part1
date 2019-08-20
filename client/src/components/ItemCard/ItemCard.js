@@ -9,7 +9,7 @@ import CardMedia from "@material-ui/core/CardMedia";
 import Grid from "@material-ui/core/Grid";
 import { ViewerContext } from "../../context/ViewerProvider";
 import Typography from "@material-ui/core/Typography";
-import { renderToStringWithData } from "react-apollo";
+import PropTypes from "prop-types";
 
 const useStyles = makeStyles({
   card: {
@@ -28,47 +28,48 @@ const useStyles = makeStyles({
   }
 });
 
-export class ItemCard extends Component {
-  render() {
-    const { item } = this.props;
-    const tagTitle = [];
-    console.log(item.created)
-    return (
-      <ViewerContext.Consumer>
-        {({ viewer }) => {
-          return (
-            <Card>
-              <Grid container>
-                <Typography>
-                  {/* <img src={item.imageurl} /> */}
-                  <Grid item xs={4}>
-                    <CardContent style={{ height: 450, width: 430 }}>
-                      <Gravatar
-                        style={{ borderRadius: 50 }}
-                        email=""
-                        size={40}
-                      />
-                      {/* <p>{item.borrower.fullname}</p> */}
-                      {/* <p>{item.created}</p> */}
-                      {/* <p>{item.title}</p> */}
-                      {/* <p>{item.description}</p> */}
-                    </CardContent>
-                    <CardActions>
-                      <Button
-                        size="small"
-                        style={{ border: 1, borderColor: "#000" }}
-                      >
-                        Borrow
-                      </Button>
-                    </CardActions>
-                  </Grid>
-                </Typography>
-              </Grid>
-            </Card>
-          );
-        }}
-      </ViewerContext.Consumer>
-    );
-  }
-}
+const ItemCard = ({ item }) => {
+  return (
+    <ViewerContext.Consumer>
+      {({ viewer }) => {
+        return (
+          <Card>
+            <Grid container>
+              <Typography>
+                <Grid item xs={4}>
+                  <CardContent style={{ height: 450, width: 430 }}>
+                    <Gravatar style={{ borderRadius: 50 }} email="" size={40} />
+                  </CardContent>
+                  <CardActions>
+                    <Button
+                      size="small"
+                      style={{ border: 1, borderColor: "#000" }}
+                    >
+                      Borrow
+                    </Button>
+                  </CardActions>
+                </Grid>
+              </Typography>
+            </Grid>
+          </Card>
+        );
+      }}
+    </ViewerContext.Consumer>
+  );
+};
+
+ItemCard.propTypes = {
+  item: PropTypes.shape({
+    borrower: PropTypes.object.isRequired,
+    created: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired,
+    imageurl: PropTypes.string.isRequired,
+    itemowner: PropTypes.object.isRequired,
+    tags: PropTypes.array.isRequired,
+    title: PropTypes.string.isRequired,
+    __typename: PropTypes.string.isRequired
+  })
+
+};
 export default ItemCard;

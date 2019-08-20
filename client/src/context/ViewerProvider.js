@@ -12,13 +12,10 @@ export const ViewerProvider = ({ children }) => {
     fullname: "Test User",
     bio: "No bio"
   };
-  // const viewer = null
   const loading = false;
-
   return (
     <Query query={VIEWER_QUERY}>
       {({ data, loading }) => {
-        // const viewer = data && data.viewer ? data.viewer : null;
         return (
           <ViewerContext.Provider value={{ viewer, loading }}>
           {children}

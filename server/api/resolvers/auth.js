@@ -1,7 +1,6 @@
 const { AuthenticationError } = require("apollo-server-express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-console.log(jwt);
 
 function setCookie({ tokenName, token, res }) {
   res.cookie(tokenName, token, {

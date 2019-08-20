@@ -15,6 +15,7 @@ import {
 import { graphql, compose } from "react-apollo";
 import validate from "./helpers/validation";
 import styles from "./styles";
+import PropTypes from "prop-types";
 
 class AccountForm extends Component {
   constructor(props) {
@@ -26,17 +27,16 @@ class AccountForm extends Component {
 
   render() {
     const { classes, loginMutation, signupMutation } = this.props;
-
     return (
       <Form
-      onSubmit={values => {
-        const user = { variables: { user: values } };
-        this.state.formToggle
-          ? loginMutation(user).catch(error => this.setState({ error }))
-          : signupMutation(user).catch(error => this.setState({ error }));
-      }}
+        onSubmit={values => {
+          const user = { variables: { user: values } };
+          this.state.formToggle
+            ? loginMutation(user).catch(error => this.setState({ error }))
+            : signupMutation(user).catch(error => this.setState({ error }));
+        }}
         validate={validate.bind(this)}
-        render={({ handleSubmit, pristine, invalid, submitting, form }) => (
+        render={({ handleSubmit, pristine, invalid, form }) => (
           <form onSubmit={handleSubmit} className={classes.accountForm}>
             {!this.state.formToggle && (
               <FormControl fullWidth className={classes.formControl}>
@@ -78,9 +78,9 @@ class AccountForm extends Component {
                 {({ input, meta }) => (
                   <Input
                     id="password"
-                    type="password"
                     inputProps={{
                       ...input,
+                      type: "password",
                       autoComplete: "off"
                     }}
                     value={input.value}
@@ -101,8 +101,8 @@ class AccountForm extends Component {
                   variant="contained"
                   size="large"
                   color="secondary"
-                  disabled={pristine || invalid }// these are coming from final form. pristine means that the form hasnt been touched 
-                  
+                  onSubmit={handleSubmit}
+                  disabled={pristine || invalid} // these are coming from final form. pristine means that the form hasnt been touched
                 >
                   {this.state.formToggle ? "Enter" : "Create Account"}
                 </Button>
@@ -132,6 +132,11 @@ class AccountForm extends Component {
   }
 }
 
+AccountForm.propTypes = {
+  classes: PropTypes.object.isRequired,
+  loginMutation: PropTypes.func.isRequired,
+  signupMutation: PropTypes.func.isRequired
+};
 
 const refetchQueries = [
   {
@@ -144,13 +149,13 @@ export default compose(
     options: {
       refetchQueries
     },
-    name: 'signupMutation'
+    name: "signupMutation"
   }),
   graphql(LOGIN_MUTATION, {
     options: {
       refetchQueries
     },
-    name: 'loginMutation'
+    name: "loginMutation"
   }),
   withStyles(styles)
 )(AccountForm);

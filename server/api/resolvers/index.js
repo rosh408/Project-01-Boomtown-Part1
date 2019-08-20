@@ -18,22 +18,12 @@ module.exports = app => {
           throw new ApolloError(e);
         }
       },
-      // original, uncomment when solution has been found
-      // async items(parent, { filter }, { pgResource }, info) {
-      //   try {
-      //     const items = await pgResource.getItems(filter);
-      //     return items;
-      //   } catch (e) {
-      //     throw "Item can't be found";
-      //   }
-      // },
       async items(parent, { filter }, { pgResource }, info) {
         try {
           const items = await pgResource.getItems(filter);
           return items;
         } catch (e) {
-          console.log(e);
-          throw "Items can't be found";
+          throw "Items can't be fonnund";
         }
       },
       async tags(parent, args, { pgResource }, info) {
@@ -68,7 +58,6 @@ module.exports = app => {
       async itemowner({ ownerid }, args, { pgResource }, info) {
         try {
           const itemowner = await pgResource.getUserById(ownerid);
-          // console.log(ownerid);
           return itemowner;
         } catch (e) {
           throw "Item owner can't be found";

@@ -60,7 +60,6 @@ module.exports = postgres => {
         throw "User cant be found";
       }
     },
-
     // original, uncomment when solution has been found
     // async getItems(idToOmit) {
     //   try {
@@ -77,7 +76,6 @@ module.exports = postgres => {
     // },
     async getItems(idToOmit) {
       try {
-        // const returnItems = await postgres.query(items);
         const items = await postgres.query({
           // This Query lets the user only see items from other people on the front page
           text: `SELECT * FROM items WHERE ownerid != $1`,
@@ -86,7 +84,6 @@ module.exports = postgres => {
         // This only seems to work when returning a single item rather than all of them
         return items.rows;
       } catch (e) {
-        console.log(e);
         throw "Can't find items";
       }
     },
@@ -99,10 +96,8 @@ module.exports = postgres => {
       };
       try {
         const getItems = await postgres.query(items);
-        console.log(getItems.rows);
         return getItems.rows;
       } catch (e) {
-        console.log(e);
         throw "Item can't be found";
       }
     },
