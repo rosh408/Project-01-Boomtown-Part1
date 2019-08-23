@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
+import styles from "./styles.js";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
@@ -11,24 +12,8 @@ import { ViewerContext } from "../../context/ViewerProvider";
 import Typography from "@material-ui/core/Typography";
 import PropTypes from "prop-types";
 
-const useStyles = makeStyles({
-  card: {
-    minWidth: 430
-  },
-  bullet: {
-    display: "inline-block",
-    margin: "0 2px",
-    transform: "scale(0.8)"
-  },
-  title: {
-    fontSize: 14
-  },
-  pos: {
-    marginBottom: 12
-  }
-});
-
-const ItemCard = ({ item }) => {
+const ItemCard = ({ item, classes }) => {
+  console.log(item);
   return (
     <ViewerContext.Consumer>
       {({ viewer }) => {
@@ -37,8 +22,27 @@ const ItemCard = ({ item }) => {
             <Grid container>
               <Typography>
                 <Grid item xs={4}>
-                  <CardContent style={{ height: 450, width: 430 }}>
-                    <Gravatar style={{ borderRadius: 50 }} email="" size={40} />
+                  <CardContent
+                    style={{ height: 450, width: 390 }}
+                    className={classes.flex}
+                  >
+                    <img src={item.imageurl} className={classes.imageStyle} />
+                    <div className={classes.flexRow}>
+                      <Gravatar
+                        style={{ borderRadius: 50 }}
+                        email="rosh_408@hotmail.com"
+                        size={40}
+                      />
+                      <div>
+                        <p>{item.itemowner.fullname}</p>
+                        <p>{item.created}</p>
+                      </div>
+                    </div>
+                    <div className={classes.flex}>
+                      <h3>{item.title}</h3>
+                      <p>{item.tags}</p>
+                      <p>{item.description}</p>
+                    </div>
                   </CardContent>
                   <CardActions>
                     <Button
@@ -70,6 +74,5 @@ ItemCard.propTypes = {
     title: PropTypes.string.isRequired,
     __typename: PropTypes.string.isRequired
   })
-
 };
-export default ItemCard;
+export default withStyles(styles)(ItemCard);
