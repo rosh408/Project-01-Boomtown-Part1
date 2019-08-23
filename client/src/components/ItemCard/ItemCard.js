@@ -40,7 +40,6 @@ const ItemCard = ({ item, classes }) => {
                     </div>
                     <div className={classes.flex}>
                       <h3>{item.title}</h3>
-                      <p>{item.tags}</p>
                       <p>{item.description}</p>
                     </div>
                   </CardContent>
